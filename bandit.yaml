@@ -1,0 +1,8 @@
+# Only the keys that take effect when bandit runs from pre-commit, which passes
+# the file list on the command line. `targets` / `output_file` / `output_format`
+# were ignored there, and output_file implied a bandit-report.json artifact that
+# was never produced and was not gitignored.
+exclude_dirs: [".venv", "venv", "build", "dist", ".context"]
+# B101 (assert) fires on asserts used as internal invariants, which this library
+# does deliberately. Tests are excluded by the hook itself.
+skips: ["B101"]

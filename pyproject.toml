@@ -1,0 +1,141 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dualybsim"
+version = "0.1.0"
+description = "Noise model for dual-isotope Ytterbium atom qubits, as a Stim circuit wrapper"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+authors = [{ name = "Fumiyoshi Kobayashi" }]
+keywords = [
+    "quantum-computing",
+    "quantum-error-correction",
+    "neutral-atom",
+    "ytterbium",
+    "stim",
+    "noise-model",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = ["numpy>=1.21.0", "stim>=1.14.0"]
+
+[project.urls]
+Repository = "https://github.com/FumiKobayashi/DualYbSim"
+
+# Development tooling, as PEP 735 groups rather than extras: it is never part of
+# what an installer of the library needs. `uv sync` installs `dev` by default.
+[dependency-groups]
+test = ["pytest>=7.0.0", "pytest-cov>=4.0.0"]
+dev = [
+    { include-group = "test" },
+    "ruff>=0.9.0",
+    "mypy>=1.0.0",
+    "pre-commit>=3.0.0",
+]
+# Only needed to re-execute examples/noise_channel_tour.ipynb.
+notebook = ["ipykernel>=6.0.0", "nbclient>=0.10.0", "nbformat>=5.0.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+dualybsim = ["py.typed"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 88
+extend-exclude = ["*.ipynb"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+    "D",  # pydocstyle (replaces the archived pydocstyle hook)
+]
+ignore = [
+    "E501", # line length handled by ruff format
+    "B008", # do not perform function calls in argument defaults
+    "C901", # too complex
+    # Docstring rules the project deliberately does not follow. Carried over
+    # from the --add-ignore list the old pydocstyle hook meant to pass.
+    "D100", # undocumented public module
+    "D104", # undocumented public package
+    "D200", # one-line docstring should fit on one line
+    "D205", # blank line required between summary line and description
+    "D400", # first line should end with a period
+    "D415", # first line should end with a period, question mark or exclamation point
+    "D105", # undocumented magic method (__repr__ / __str__ speak for themselves)
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+# Tests and examples document themselves by name; docstrings are not required.
+"tests/*" = ["D101", "D102", "D103", "D105", "D107"]
+"examples/*" = ["D103"]
+
+[tool.mypy]
+# No python_version pin: mypy then follows the running interpreter. Pinning it
+# to 3.10 makes mypy parse the installed numpy stubs under 3.10 rules, and those
+# stubs use PEP 695 `type` statements that only parse on 3.12+.
+warn_unused_configs = true
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_no_return = true
+strict_equality = true
+# Flags a `# type: ignore` that is no longer needed, so the frozen debt below
+# shrinks instead of rotting.
+warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = ["numpy.*", "stim.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = ["--strict-markers", "--strict-config"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
+
+[tool.coverage.run]
+source = ["src/dualybsim"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "@(abc\\.)?abstractmethod",
+]

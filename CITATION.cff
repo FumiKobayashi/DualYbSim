@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: If you use this software, please cite it as below.
+title: >-
+  DualYbSim: a noise model for dual-isotope ytterbium neutral-atom qubits
+abstract: >-
+  A noise model for dual-isotope ytterbium neutral-atom qubits, packaged as a wrapper around Stim. Kraus operators for the 171Yb ground and metastable qubits and the 174Yb optical clock qubit are defined on the full multi-level Hilbert space, including the Rydberg and effective loss states, and reduced to Pauli plus loss channels by the generalised Pauli twirling approximation so that they can be inserted into a stabiliser circuit.
+type: software
+authors:
+  - family-names: Kobayashi
+    given-names: Fumiyoshi
+  - family-names: Fazio
+    given-names: Nicholas
+  - family-names: Kusano
+    given-names: Toshi
+  - family-names: Nakamura
+    given-names: Yuma
+license: MIT
+repository-code: https://github.com/FumiKobayashi/DualYbSim
+keywords:
+  - quantum error correction
+  - neutral atom
+  - ytterbium
+  - noise model
+  - stim
+# The accompanying paper is in preparation; add its DOI and a preferred-citation
+# block once it is available.

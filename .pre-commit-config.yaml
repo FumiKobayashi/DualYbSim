@@ -1,0 +1,40 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-docstring-first
+      - id: check-json
+      - id: check-toml
+      - id: debug-statements
+
+  # Format + lint from pyproject.toml ([tool.ruff], [tool.ruff.format], [tool.ruff.lint]).
+  # `rev` must track uv.lock's ruff: a stale pin enforces rules the project's
+  # own ruff has already removed, so the hook and CI disagree on clean code.
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.3
+    hooks:
+      - id: ruff-check
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format
+
+  # Kept identical to CI's `mypy src/dualybsim`: same version as uv.lock, same
+  # scope, and numpy/stim installed so their types are real rather than Any.
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v2.3.1
+    hooks:
+      - id: mypy
+        files: ^src/dualybsim/
+        additional_dependencies: ["numpy==2.2.6", "stim==1.16.0"]
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.8.6
+    hooks:
+      - id: bandit
+        args: [-c, bandit.yaml]
+        exclude: ^tests/
