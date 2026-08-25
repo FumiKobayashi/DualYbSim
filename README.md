@@ -1,5 +1,7 @@
 # DualYbSim
 
+[![CI](https://github.com/FumiKobayashi/DualYbSim/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/FumiKobayashi/DualYbSim/actions/workflows/ci.yml)
+
 This library is a noise model replicating ytterbium atom qubits on Clifford circuits.
 
 A noise model for dual-isotope ytterbium neutral-atom qubits, packaged as a wrapper around [Stim](https://github.com/quantumlib/Stim). Give it an ideal Clifford circuit and a description of which atom each qubit is; get back the same circuit with physically-motivated noise inserted, ready for detector sampling and decoding.
