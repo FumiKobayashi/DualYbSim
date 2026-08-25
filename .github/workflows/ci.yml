@@ -6,6 +6,12 @@ on:
   pull_request:
   workflow_dispatch:
 
+# Every job only reads the checkout: no artifacts, comments, releases or
+# secrets. Set here rather than relying on the repository default, which a
+# fork does not inherit.
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
